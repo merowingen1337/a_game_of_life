@@ -1,5 +1,5 @@
 const CFG = {
-    field_size: 5000, // cells in a row
+    field_size: 100, // cells in a row
     bg_color: "black",
     cell_color: "green",
     fps: 10,
@@ -55,16 +55,35 @@ ctx.fillRect(0,0,canvas.width,canvas.height)
 const pixels2idx = (x,y,csize) => Math.floor(x / csize)  + fsize * Math.floor(y / csize)
 const coord2idx = (x,y) => pixels2idx(x,y,1)
 
-var onclick_listener = ev => {
+var is_mousedown = false
+
+var add_cell = ev => {
     let x = ev.clientX
     let y = ev.clientY
     let idx = pixels2idx(x,y,cell_size)
+    if (cellz[idx]) return;
     cellz[idx] = 1
     draw()
-    console.log('x: ',x,'y: ',y,'idx: ',idx,'added.')
+    console.log('x: ',x,'y: ',y,'idx: ',idx,'added.')    
 }
 
-window.addEventListener("click",onclick_listener)
+var mousedown_listener = ev => {
+    is_mousedown = true
+    add_cell(ev)
+}
+
+var mousemove_listener = ev => {
+    if(is_mousedown) add_cell(ev)
+}
+
+var mouseup_listener = ev => {
+    is_mousedown = false
+    add_cell(ev)
+}
+
+addEventListener("mousedown",mousedown_listener)
+addEventListener("mousemove",mousemove_listener)
+addEventListener("mouseup",mouseup_listener)
 
 var controls = document.createElement("div")
 var cst = controls.style
@@ -115,8 +134,10 @@ var btfps_listener = ev => {
     ev.stopPropagation()
     CFG.fps = infps.value || CFG.fps
     evloop(1000/CFG.fps)
+    console.log("fps is set to: ",CFG.fps)
 }
 btfps.addEventListener("focus",no_focus)
+btfps.addEventListener("click",btfps_listener)
 controls.appendChild(btfps)
 
 
