@@ -1,5 +1,5 @@
 const CFG = {
-    field_size: 100, // cells in a row
+    field_size: 5000, // cells in a row
     bg_color: "black",
     cell_color: "green",
     fps: 10,
@@ -156,7 +156,10 @@ const update = () => {
         let adj = refcount[c] - state
         cellz_mirror[c] = adj == 3 ? 1 : adj == 2 ? state : 0
     }
+    let buble = cellz
     cellz = cellz_mirror
+    cellz_mirror = buble
+    cellz_mirror.fill(0)
 }
 
 const tick = () => {
