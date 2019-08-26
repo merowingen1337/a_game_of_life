@@ -1,8 +1,8 @@
 const CFG = {
-    field_size: 100, // cells in a row
+    field_size: 150, // cells in a row
     bg_color: "black",
-    cell_color: "green",
-    fps: 10,
+    cell_color: "cyan",
+    fps: 20,
 
     controls: {
         right: 70,
@@ -150,7 +150,7 @@ const draw = () => {
     ctx.fillStyle = CFG.bg_color
     ctx.fillRect(0,0,canvas.width,canvas.height)
     ctx.fillStyle = CFG.cell_color
-    cellz.forEach((c,idx) => c ? draw_cell(idx) : false)
+    cellz.forEach((c,idx) => c && draw_cell(idx))
 }
 
 const update = () => {
@@ -185,7 +185,10 @@ const update = () => {
 
 const tick = () => {
     draw()
+    let now = performance.now()
     update()
+    let then = performance.now()
+    console.log("ELAPSED: ",then - now)
 }
 
 const draw_cell = cell =>
